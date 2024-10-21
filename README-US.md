@@ -58,28 +58,30 @@ Transfer files between computers or mobile phones, no size limit.
 #### Installation dependencies
 
 ```javascript
-  $ yarn
+  $ npm i
 ```
 
 #### Development
 
-1. start the rendering process with the following command(default port：8000)
+**nodejs version must <= 16.x.x**
+
+1. start the rendering process
 
 ```javascript
-  $ yarn start:renderer
+  $ npm run start:renderer
 ```
 
 2. start the main process
 
 ```javascript
-  $ yarn start:main
+  $ npm run start:main
 ```
 
 #### build
 
 ```javascript
-  $ npm run pack  // 打包macOS
-  $ npm run exe   // 打包windows
+  $ npm run pack-mac  // build macOS
+  $ npm run pack-exe   // build windows
 ```
 
 If you want to package the code into a dmg file or zip file, you can execute the following command

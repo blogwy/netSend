@@ -8,6 +8,7 @@ import Koa from 'koa';
 import Router from '@koa/router';
 import cors from '@koa/cors';
 import bodyParser from 'koa-body';
+import KoaRange from 'koa-range';
 import fs from 'fs'
 import path from 'path'
 import DB from './db';
@@ -35,29 +36,9 @@ router.get('/file/:id/:name', async (ctx, next) => {
     const { id } = ctx.params;
     // 拿到文件名，检查文件是否存在，存在则返回文件流，不存在404
     const file = await db.findById(id)
-    const range = ctx.get('Range')
     if (file) {
         try {
-            // 如果文件不存在，则stat会报错，直接404
-            const stats = fs.statSync(file.path);
-            const filename = path.basename(file.path)
-            const { start, end } = parseRange(range, stats.size)
-
-            if (start >= stats.size || end > stats.size) {
-                ctx.response.status = 416;
-                ctx.body = "";
-                return;
-            }
-            ctx.response.status = 206;
-            ctx.set('Accept-Ranges', 'bytes');
-            ctx.set('Content-Type', 'application/octet-stream');
-            ctx.set('Content-Disposition', 'attachment; filename=' + encodeURIComponent(filename));
-            ctx.set('Content-Length', !range ? end - start : end - start + 1);
-            ctx.set('Content-Range', `bytes ${start}-${end}/${stats.size}`);
-            ctx.body = fs.createReadStream(file.path, {
-                start,
-                end
-            });
+            ctx.body = fs.createReadStream(file.path);
         } catch (error) {
             console.log('error', error);
             ctx.status = 404
@@ -132,7 +113,8 @@ app
         }
     }))
     .use(router.routes())
-    .use(router.allowedMethods());
+    .use(router.allowedMethods())
+    .use(KoaRange);
 
 const startServer = async (port) => {
     if (!serverStatus) {

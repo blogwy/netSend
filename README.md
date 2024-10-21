@@ -58,31 +58,33 @@
 
 #### 安装
 
-然后通过 yarn 下载依赖
+然后通过 npm 下载依赖
 
 ```javascript
-  $ yarn
+  $ npm i
 ```
 
 #### 开发
 
-首先通过以下命令启动渲染进程(默认端口：8000)
+**nodejs版本务必 <= 16.x.x**
+
+1. 启动渲染进程
 
 ```javascript
-  $ yarn start:renderer
+  $ npm run start:renderer
 ```
 
-然后启动主进程
+2. 然后启动主进程
 
 ```javascript
-  $ yarn start:main
+  $ npm run start:main
 ```
 
 #### 打包
 
 ```javascript
-  $ npm run pack  // 打包macOS
-  $ npm run exe   // 打包windows
+  $ npm run pack-mac  // 打包macOS
+  $ npm run pack-exe   // 打包windows
 ```
 
 如果想把代码打包成一个 dmg 文件或者 zip 文件，可以执行以下命令
